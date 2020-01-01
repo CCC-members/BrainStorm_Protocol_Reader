@@ -19,17 +19,16 @@ if(isequal(selected_data_format.name,'BrainStorm') && is_checked_datastructure_p
                         OuterSkullFile = fullfile(protocol_anat_path,subject.Surface(subject.iOuterSkull).FileName);
                         for k=1: length(protocol.ProtocolStudies.Study)
                             study = protocol.ProtocolStudies.Study(k);
-                            if(isequal(fileparts(study.BrainStormSubject),subject.Name) && ~isempty(study.Channel))
-                                ChannelsFile = fullfile(protocol_data_path,study.Channel.FileName);
-                                BSTHeadModelFiles = dir(fullfile(protocol_data_path,fileparts(study.FileName),'headmodel_surf_openmeeg*.mat'));
-                                [~,idx] = sort([BSTHeadModelFiles.datenum]);
-                                BSTHeadModelFile = BSTHeadModelFiles(idx(end));
-                                HeadModelFile = fullfile(BSTHeadModelFile.folder,BSTHeadModelFile.name);
+                            if(isequal(fileparts(study.BrainStormSubject),subject.Name) && ~isempty(study.iChannel) && ~isempty(study.iHeadModel))
+                                ChannelsFile = fullfile(protocol_data_path,study.Channel(study.iChannel).FileName);
+                                HeadModelFile = fullfile(protocol_data_path,study.HeadModel(study.iHeadModel).FileName);
+                                modality = char(study.Channel.Modalities);
                                 break;
                             end
-                        end
+                        end       
                         %% Save here all files or do other things
                         % These are all files
+                        modality
                         CortexFile
                         ScalpFile
                         InnerSkullFile
